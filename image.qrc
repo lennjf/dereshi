@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>dereshi.svg</file>
+    </qresource>
+</RCC>

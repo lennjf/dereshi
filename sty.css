@@ -1,0 +1,9 @@
+QPushButton:pressed {
+    font-weight: bold;
+}
+
+QWidget {
+    background-color: #F5DEB3;
+    border-radius: 5px;
+}
+

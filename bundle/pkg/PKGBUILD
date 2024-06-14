@@ -1,0 +1,17 @@
+pkgname=dereshi
+pkgver=1.2
+pkgrel=1
+pkgdesc="mp3 player"
+arch=('any')
+
+depends=("qt6-base" "qt6-declarative" "qt6-multimedia" "qt6-multimedia-ffmpeg" "qt6-svg")
+package() {
+  install -d "$pkgdir/opt/dereshi"
+  install -d "$pkgdir/usr/share/applications/"
+  install -d "$pkgdir/usr/share/icons/hicolor/32x32/apps/"
+  install -d "$pkgdir/usr/share/icons/hicolor/128x128/apps/"
+  cp -rf "/repo/qt/qtProject/dereshi/bundle/pkg/opt/" "$pkgdir"
+  install -m644 "/repo/qt/qtProject/dereshi/bundle/pkg/dereshi.desktop" "$pkgdir/usr/share/applications/"
+  install -m644 "/repo/qt/qtProject/dereshi/bundle/pkg/32dereshi.png" "$pkgdir/usr/share/icons/hicolor/32x32/apps/dereshi.png"
+  install -m644 "/repo/qt/qtProject/dereshi/bundle/pkg/128dereshi.png" "$pkgdir/usr/share/icons/hicolor/128x128/apps/dereshi.png"
+}
