@@ -22,7 +22,7 @@ QT_END_NAMESPACE
 class Widget : public QWidget
 {
     Q_OBJECT
-
+    Q_CLASSINFO("D-Bus Interface", "com.player.dereshi")
 public:
     Widget(Widget *parent = nullptr);
     ~Widget();

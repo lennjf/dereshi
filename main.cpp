@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QSharedMemory>
 #include <QTimer>
-
+#include <QtDBus>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -16,25 +16,30 @@ int main(int argc, char *argv[])
                 sharedMemory.detach();
                 // qInfo() << "detach when close ";
             });
-            char* ch = static_cast<char*>(sharedMemory.data());
-            sharedMemory.lock();
-            *ch = 1;
-            sharedMemory.unlock();
+            // char* ch = static_cast<char*>(sharedMemory.data());
+            // sharedMemory.lock();
+            // *ch = 1;
+            // sharedMemory.unlock();
             Widget w;
 
-            QTimer timer;
-            QObject::connect(&timer, &QTimer::timeout, &a, [&sharedMemory, &w]() {
-                char *ch = static_cast<char*>(sharedMemory.data());
-                // qInfo() << "shared: "<< QString::fromLocal8Bit(ch);
-                if (*ch == 0) {
-                    // qInfo() << "another process ";
-                    w.showAndActivate();
-                    sharedMemory.lock();
-                    *ch = 1;
-                    sharedMemory.unlock();
-                }
-            });
-            timer.start(500);
+            // QTimer timer;
+            // QObject::connect(&timer, &QTimer::timeout, &a, [&sharedMemory, &w]() {
+            //     char *ch = static_cast<char*>(sharedMemory.data());
+            //     qInfo() << "shared: "<< QString::fromUtf8(ch);
+            //     if (*ch == 0) {
+            //         // qInfo() << "another process ";
+            //         w.showAndActivate();
+            //         sharedMemory.lock();
+            //         *ch = 1;
+            //         sharedMemory.unlock();
+            //     }
+            // });
+            // timer.start(500);
+
+
+            QDBusConnection::sessionBus().registerObject("/com/player/dereshi", &w, QDBusConnection::ExportAllSlots);
+
+            QDBusConnection::sessionBus().registerService("com.player.dereshi");
 
             w.show();
             return a.exec();
@@ -44,11 +49,14 @@ int main(int argc, char *argv[])
             return 1;
         }
     }else {
-        char* ch = static_cast<char*>(sharedMemory.data());
-        // qInfo() << "instance: " << QString::fromLocal8Bit(ch);
-        sharedMemory.lock();
-        *ch = 0;
-        sharedMemory.unlock();
+        // char* ch = static_cast<char*>(sharedMemory.data());
+        // qInfo() << "instance: " << QString::fromUtf8(ch);
+        // sharedMemory.lock();
+        // *ch = 0;
+        // sharedMemory.unlock();
+
+        QDBusInterface interface("com.player.dereshi", "/com/player/dereshi", "", QDBusConnection::sessionBus());
+        interface.call("showAndActivate");
         sharedMemory.detach();
         // QMessageBox::critical(nullptr, "warning", "there is one dereshi player is running");
         a.quit();
