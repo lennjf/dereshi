@@ -17,8 +17,9 @@ int main(int argc, char *argv[])
                 // qInfo() << "detach when close ";
             });
             char* ch = static_cast<char*>(sharedMemory.data());
+            sharedMemory.lock();
             *ch = 1;
-
+            sharedMemory.unlock();
             Widget w;
 
             QTimer timer;
@@ -28,7 +29,9 @@ int main(int argc, char *argv[])
                 if (*ch == 0) {
                     // qInfo() << "another process ";
                     w.showAndActivate();
+                    sharedMemory.lock();
                     *ch = 1;
+                    sharedMemory.unlock();
                 }
             });
             timer.start(500);
@@ -43,7 +46,9 @@ int main(int argc, char *argv[])
     }else {
         char* ch = static_cast<char*>(sharedMemory.data());
         // qInfo() << "instance: " << QString::fromLocal8Bit(ch);
+        sharedMemory.lock();
         *ch = 0;
+        sharedMemory.unlock();
         sharedMemory.detach();
         // QMessageBox::critical(nullptr, "warning", "there is one dereshi player is running");
         a.quit();
