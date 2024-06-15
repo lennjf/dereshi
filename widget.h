@@ -54,6 +54,8 @@ private slots:
     void onAudioDevicesChanged();
 
     void on_closebtn_clicked();
+public slots:
+    void showAndActivate();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

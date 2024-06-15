@@ -124,11 +124,7 @@ Widget::~Widget()
     delete mp3dir;
     delete settings;
     delete device;
-    QString appid = "dereshi-player";
-    QSharedMemory sharedMemory(appid, qApp);
-    if(sharedMemory.isAttached()){
-        sharedMemory.detach();
-    }
+
 }
 
 void Widget::createTrayIcon()
@@ -206,6 +202,12 @@ void Widget::grogress_changed()
 void Widget::on_closebtn_clicked()
 {
     this->hide();
+}
+
+void Widget::showAndActivate()
+{
+    this->show();
+    this->activateWindow();
 }
 
 bool isProgressBar(QWidget *widget) {
